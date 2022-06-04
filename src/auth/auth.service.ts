@@ -13,10 +13,10 @@ export class AuthService {
     private prismaService: PrismaService,
     private jwtService: JwtService,
   ) {
-    this.jwtSecret = this.configService.get('JWT_SECRET')
+    this.jwtSecret = this.configService.get('JWT_SECRET');
   }
 
-  private readonly jwtSecret: string; 
+  private readonly jwtSecret: string;
 
   async signup(dto: AuthDto) {
     const hash = await argon.hash(dto.password);
@@ -30,7 +30,7 @@ export class AuthService {
         },
       });
 
-      return this.signToken(user.id, user.email)
+      return this.signToken(user.id, user.email);
     } catch (ex: any) {
       if (ex instanceof PrismaClientKnownRequestError) {
         if (ex.code === 'P2002') {
@@ -50,35 +50,31 @@ export class AuthService {
       },
     });
 
-		if (!user) {
-			throw new ForbiddenException(
-				'Credentials incorrect',
-			);
-		}
+    if (!user) {
+      throw new ForbiddenException('Credentials incorrect');
+    }
 
-		const pwMatch = await argon.verify(user.hash, dto.password);
-		if (!pwMatch) {
-			throw new ForbiddenException(
-				'Credentials incorrect',
-			);
-		}
+    const pwMatch = await argon.verify(user.hash, dto.password);
+    if (!pwMatch) {
+      throw new ForbiddenException('Credentials incorrect');
+    }
 
-		return this.signToken(user.id, user.email)
+    return this.signToken(user.id, user.email);
   }
 
   async signToken(userId: number, email: string) {
     const payload = {
       sub: userId,
       email: email,
-    }
+    };
 
     const token = await this.jwtService.signAsync(payload, {
       expiresIn: '15m',
       secret: this.jwtSecret,
-    })
+    });
 
     return {
-      "access_token": token,
-    }
+      access_token: token,
+    };
   }
 }
