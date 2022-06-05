@@ -118,7 +118,30 @@ describe('App e2e', () => {
 
   describe('User', () => {
     describe('Get me', () => {
-      
+      const getMePath: string = '/users/me'
+      it('get user successfully', () => {
+        return pactum.spec()
+        .get(getMePath)
+        .withHeaders({
+          Authorization: 'Bearer $S{userAccessToken}', // $S{} -> reference pactum var
+        })
+        .expectStatus(200)
+      })
+
+      it('get user fails when access token is not provided', () => {
+        return pactum.spec()
+        .get(getMePath)
+        .expectStatus(401)
+      })
+
+      it('get user fails when provided invalid access token', () => {
+        return pactum.spec()
+        .get(getMePath)
+        .withHeaders({
+          Authorization: 'Bearer invalid.access.token',
+        })
+        .expectStatus(401)
+      })
     })
 
     describe('Edit user', () => {
