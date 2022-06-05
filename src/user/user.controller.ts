@@ -16,8 +16,10 @@ export class UserController {
   }
 
   @Patch('update')
-  updateUser(@GetUser('id') userId: number, @Body() dto: EditUserDto) {
-    console.log(userId)
+  updateUser(
+    @GetUser('sub') userId: number,
+    @Body() dto: EditUserDto,
+  ) {
     return this.userService.updateUser(userId, dto)
   }
 }
