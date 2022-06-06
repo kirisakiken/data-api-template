@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
+import { CreateBookMarkDto, UpdateBookmarkDto } from 'src/bookmark/dto';
 
 @Injectable()
 export class PrismaService extends PrismaClient {
@@ -21,6 +22,8 @@ export class PrismaService extends PrismaClient {
     ]);
   }
 
+  //#region Bookmarks Repository Calls
+
   getAllBookmarks(userId: number) {
     return this.bookmark.findMany({
       where: {
@@ -28,4 +31,25 @@ export class PrismaService extends PrismaClient {
       },
     })
   }
+
+  getBookmark(userId: number, bookmarkId: number) {}
+
+  createBookmark(userId: number, dto: CreateBookMarkDto) {
+    return this.bookmark.create({
+      data: {
+        user_id: userId,
+        ...dto,
+      },
+    })
+  }
+
+  updateBookmark(userId: number, bookmarkId: number, dto: UpdateBookmarkDto) {
+
+  }
+
+  deleteBookmarkById(userId: number, bookmarkId: number) {
+
+  }
+
+  //#endregion
 }

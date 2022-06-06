@@ -11,18 +11,18 @@ export class BookmarkService {
 	}
 
 	getBookmarkById(userId: number, bookmarkId: number) {
-
+    return this.prismaService.getBookmark(userId, bookmarkId)
 	}
 
 	createBookmark(userId: number, dto: CreateBookMarkDto) {
-
+    return this.prismaService.createBookmark(userId, dto)
 	}
 
 	updateBookmarkById(userId: number, bookmarkId: number, dto: UpdateBookmarkDto) {
-
+    return this.prismaService.updateBookmark(userId, bookmarkId, dto)
 	}
 
 	deleteBookmarkById(userId: number, bookmarkId: number) {
-
+    return this.prismaService.deleteBookmarkById(userId, bookmarkId)
 	}
 }
