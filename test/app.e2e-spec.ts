@@ -290,7 +290,82 @@ describe('App e2e', () => {
       })
     })
 
-    describe('Create bookmark', () => {})
+    describe('Create bookmark', () => {
+      it('create bookmark successfully', () => {
+        const dto: CreateBookMarkDto = {
+          title: 'test-title-1',
+          link: 'test-link-1',
+          description: 'test-description-1',
+        }
+
+        return pactum.spec()
+        .post(bookmarksPath)
+        .withHeaders({
+          Authorization: 'Bearer $S{userAccessToken}',
+        })
+        .withBody(dto)
+        .expectStatus(201)
+        .expectBodyContains(dto.title)
+        .expectBodyContains(dto.link)
+        .expectBodyContains(dto.description)
+      })
+
+      it('create bookmark without providing optional parameters', () => {
+        const dto: CreateBookMarkDto = {
+          title: 'test-title-2',
+          link: 'test-link-2',
+        }
+
+        return pactum.spec()
+        .post(bookmarksPath)
+        .withHeaders({
+          Authorization: 'Bearer $S{userAccessToken}',
+        })
+        .withBody(dto)
+        .expectStatus(201)
+        .expectBodyContains(dto.title)
+        .expectBodyContains(dto.link)
+      })
+
+      it('create bookmark fails when unauthorized', () => {
+        return pactum.spec()
+        .post(bookmarksPath)
+        .withBody({
+          title: 'test',
+          description: 'test',
+          link: 'test',
+        })
+        .expectStatus(403)
+      })
+    })
+
+    describe('Get bookmarks after creating', () => {
+      it('get bookmarks successfully', () => {
+        return pactum.spec()
+        .get(bookmarksPath)
+        .withHeaders({
+          Authorization: 'Bearer $S{userAccessToken}',
+        })
+        .expectStatus(200)
+        .expectBody([
+          {
+            title: 'test-title-1',
+            link: 'test-link-1',
+            description: 'test-description-1',
+          },
+          {
+            title: 'test-title-2',
+            link: 'test-link-2',
+          },
+        ])
+      })
+
+      it('get bookmarks fail when unauthorized', () => {
+        return pactum.spec()
+        .get(bookmarksPath)
+        .expectStatus(403)
+      })
+    })
 
     describe('Get bookmark by id', () => {})
 
