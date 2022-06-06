@@ -308,6 +308,7 @@ describe('App e2e', () => {
         .expectBodyContains(dto.title)
         .expectBodyContains(dto.link)
         .expectBodyContains(dto.description)
+        .stores('bookmarkId', 'id')
       })
 
       it('create bookmark without providing optional parameters', () => {
@@ -367,7 +368,37 @@ describe('App e2e', () => {
       })
     })
 
-    describe('Get bookmark by id', () => {})
+    describe('Get bookmark by id', () => {
+      it('get bookmark successfully', () => {
+        return pactum.spec()
+        .get(`${bookmarksPath}/{id}`)
+        .withPathParams('id', '$S{bookmarkId}')
+        .withHeaders({
+          Authorization: 'Bearer $S{userAccessToken}',
+        })
+        .expectStatus(200)
+        .expectBodyContains('test-title-1')
+        .expectBodyContains('test-link1')
+        .expectBodyContains('test-description-1')
+      })
+
+      it('get bookmark fails if not found', () => {
+        return pactum.spec()
+        .get(`${bookmarksPath}/{id}`)
+        .withPathParams('id', '2500')
+        .withHeaders({
+          Authorization: 'Bearer $S{userAccessToken}',
+        })
+        .expectStatus(404)
+      })
+
+      it('get bookmark fails when unauthorized', () => {
+        return pactum.spec()
+        .get(`${bookmarksPath}/{id}`)
+        .withPathParams('id', '$S{bookmarkId}')
+        .expectStatus(403)
+      })
+    })
 
     describe('Edit bookmark', () => {})
 
