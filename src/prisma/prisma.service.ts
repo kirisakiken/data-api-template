@@ -32,13 +32,19 @@ export class PrismaService extends PrismaClient {
     })
   }
 
-  getBookmark(userId: number, bookmarkId: number) {
-    return this.bookmark.findFirst({
+  async getBookmark(userId: number, bookmarkId: number) {
+    const bookmark = await this.bookmark.findFirst({
       where: {
         id: bookmarkId,
         user_id: userId,
       },
     })
+
+    if (!bookmark) {
+      throw new NotFoundException(`Unable to find bookmark by id: ${bookmarkId}`)
+    }
+
+    return bookmark
   }
 
   createBookmark(userId: number, dto: CreateBookMarkDto) {
@@ -72,8 +78,18 @@ export class PrismaService extends PrismaClient {
     })
   }
 
-  deleteBookmarkById(userId: number, bookmarkId: number) {
+  async deleteBookmarkById(userId: number, bookmarkId: number) {
+    const bookmark = await this.getBookmark(userId, bookmarkId)
 
+    if (!bookmark) {
+      throw new NotFoundException(`Unable to find bookmark by id: ${bookmarkId}`)
+    }
+
+    return this.bookmark.delete({
+      where: {
+        id: bookmark.id,
+      },
+    })
   }
 
   //#endregion
