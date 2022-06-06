@@ -32,7 +32,14 @@ export class PrismaService extends PrismaClient {
     })
   }
 
-  getBookmark(userId: number, bookmarkId: number) {}
+  getBookmark(userId: number, bookmarkId: number) {
+    return this.bookmark.findFirst({
+      where: {
+        id: bookmarkId,
+        user_id: userId,
+      },
+    })
+  }
 
   createBookmark(userId: number, dto: CreateBookMarkDto) {
     return this.bookmark.create({
