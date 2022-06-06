@@ -20,4 +20,12 @@ export class PrismaService extends PrismaClient {
       this.user.deleteMany(),
     ]);
   }
+
+  getAllBookmarks(userId: number) {
+    return this.bookmark.findMany({
+      where: {
+        user_id: userId,
+      },
+    })
+  }
 }
