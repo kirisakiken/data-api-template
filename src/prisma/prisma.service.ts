@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
 import { CreateBookMarkDto, UpdateBookmarkDto } from 'src/bookmark/dto';
@@ -50,8 +50,26 @@ export class PrismaService extends PrismaClient {
     })
   }
 
-  updateBookmark(userId: number, bookmarkId: number, dto: UpdateBookmarkDto) {
+  async updateBookmark(userId: number, bookmarkId: number, dto: UpdateBookmarkDto) {
+    const bookmark = await this.bookmark.findFirst({
+      where: {
+        id: bookmarkId,
+        user_id: userId,
+      },
+    })
 
+    if (!bookmark) {
+      throw new NotFoundException(`Unable to find bookmark by id: ${bookmarkId}`)
+    }
+
+    return this.bookmark.update({
+      where: {
+        id: bookmarkId,
+      },
+      data: {
+        ...dto,
+      },
+    })
   }
 
   deleteBookmarkById(userId: number, bookmarkId: number) {
