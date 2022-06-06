@@ -5,6 +5,7 @@ import { AppModule } from '../src/app.module'
 import * as pactum from 'pactum'
 import { AuthDto } from 'src/auth/dto'
 import { EditUserDto } from 'src/user/dto'
+import { CreateBookMarkDto } from 'src/bookmark/dto'
 
 describe('App e2e', () => {
   let app: INestApplication
@@ -276,14 +277,25 @@ describe('App e2e', () => {
   })
 
   describe('Bookmark', () => {
-    describe('Create bookmark', () => {});
+    const bookmarksPath: string = '/bookmarks'
+    describe('Get empty bookmarks', () => {
+      it('get bookmarks successfully', () => {
+        return pactum.spec()
+        .get(bookmarksPath)
+        .withHeaders({
+          Authorization: 'Bearer $S{userAccessToken}',
+        })
+        .expectStatus(200)
+        .expectBody([])
+      })
+    })
 
-    describe('Get bookmarks', () => {});
+    describe('Create bookmark', () => {})
 
-    describe('Get bookmark by id', () => {});
+    describe('Get bookmark by id', () => {})
 
-    describe('Edit bookmark', () => {});
+    describe('Edit bookmark', () => {})
 
-    describe('Delete bookmark', () => {});
+    describe('Delete bookmark', () => {})
   })
 })
