@@ -5,7 +5,7 @@ import { AppModule } from '../src/app.module'
 import * as pactum from 'pactum'
 import { AuthDto } from 'src/auth/dto'
 import { EditUserDto } from 'src/user/dto'
-import { CreateBookMarkDto } from 'src/bookmark/dto'
+import { CreateBookMarkDto, UpdateBookmarkDto } from 'src/bookmark/dto'
 
 describe('App e2e', () => {
   let app: INestApplication
@@ -326,6 +326,7 @@ describe('App e2e', () => {
         .expectStatus(201)
         .expectBodyContains(dto.title)
         .expectBodyContains(dto.link)
+        .stores('bookmarkId2', 'id2')
       })
 
       it('create bookmark fails when unauthorized', () => {
@@ -377,6 +378,7 @@ describe('App e2e', () => {
           Authorization: 'Bearer $S{userAccessToken}',
         })
         .expectStatus(200)
+        .expectBodyContains('$S{bookmarkId}')
         .expectBodyContains('test-title-1')
         .expectBodyContains('test-link1')
         .expectBodyContains('test-description-1')
@@ -400,8 +402,77 @@ describe('App e2e', () => {
       })
     })
 
-    describe('Edit bookmark', () => {})
+    describe('Update bookmark', () => {
+      const dto: UpdateBookmarkDto = {
+        title: 'update-title-99',
+        description: 'update-desc-99',
+        link: 'update-link-99'
+      }
 
-    describe('Delete bookmark', () => {})
+      it('update bookmark successfully', () => {
+        return pactum.spec()
+        .patch(`${bookmarksPath}/{id}`)
+        .withPathParams('id', '$S{bookmarkId}')
+        .withBody(dto)
+        .withHeaders({
+          Authorization: 'Bearer $S{userAccessToken}',
+        })
+        .expectStatus(200)
+        .expectBodyContains(dto.title)
+        .expectBodyContains(dto.description)
+        .expectBodyContains(dto.link)
+      })
+
+      it('update bookmark successfully partial', () => {
+        const partialDto: UpdateBookmarkDto = {
+          title: 'update-title-15',
+        }
+
+        return pactum.spec()
+        .patch(`${bookmarksPath}/{id}`)
+        .withPathParams('id', '$S{bookmarkId}')
+        .withBody(dto)
+        .withHeaders({
+          Authorization: 'Bearer $S{userAccessToken}',
+        })
+        .expectStatus(200)
+        .expectBodyContains(partialDto.title)
+        .expectBodyContains(dto.description)
+        .expectBodyContains(dto.link)
+      })
+
+      it('update bookmark fails if not found', () => {
+        return pactum.spec()
+        .patch(`${bookmarksPath}/{id}`)
+        .withPathParams('id', '5239212')
+        .withBody(dto)
+        .withHeaders({
+          Authorization: 'Bearer $S{userAccessToken}',
+        })
+        .expectStatus(404)
+      })
+
+      it('update bookmark fails if unauthorized', () => {
+        return pactum.spec()
+        .patch(`${bookmarksPath}/{id}`)
+        .withPathParams('id', '$S{bookmarkId}')
+        .withBody(dto)
+        .expectStatus(403)
+      })
+    })
+
+    describe('Delete bookmark', () => {
+      it('delete bookmark successfully', () => {
+
+      })
+
+      it('delete bookmark fails if not found', () => {
+
+      })
+
+      it('delete bookmark fails if unauthorized', () => {
+        
+      })
+    })
   })
 })
