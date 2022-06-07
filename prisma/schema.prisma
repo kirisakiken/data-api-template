@@ -61,4 +61,5 @@ model Student {
   entry_year Int
 
   @@id([student_no])
+  @@map("students")
 }
