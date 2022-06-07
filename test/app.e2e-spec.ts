@@ -337,7 +337,7 @@ describe('App e2e', () => {
           description: 'test',
           link: 'test',
         })
-        .expectStatus(403)
+        .expectStatus(401)
       })
     })
 
@@ -349,23 +349,17 @@ describe('App e2e', () => {
           Authorization: 'Bearer $S{userAccessToken}',
         })
         .expectStatus(200)
-        .expectBody([
-          {
-            title: 'test-title-1',
-            link: 'test-link-1',
-            description: 'test-description-1',
-          },
-          {
-            title: 'test-title-2',
-            link: 'test-link-2',
-          },
-        ])
+        .expectBodyContains('test-title-1')
+        .expectBodyContains('test-link-1')
+        .expectBodyContains('test-description-1')
+        .expectBodyContains('test-title-2')
+        .expectBodyContains('test-link-2')
       })
 
       it('get bookmarks fail when unauthorized', () => {
         return pactum.spec()
         .get(bookmarksPath)
-        .expectStatus(403)
+        .expectStatus(401)
       })
     })
 
@@ -380,7 +374,7 @@ describe('App e2e', () => {
         .expectStatus(200)
         .expectBodyContains('$S{bookmarkId}')
         .expectBodyContains('test-title-1')
-        .expectBodyContains('test-link1')
+        .expectBodyContains('test-link-1')
         .expectBodyContains('test-description-1')
       })
 
@@ -398,7 +392,7 @@ describe('App e2e', () => {
         return pactum.spec()
         .get(`${bookmarksPath}/{id}`)
         .withPathParams('id', '$S{bookmarkId}')
-        .expectStatus(403)
+        .expectStatus(401)
       })
     })
 
@@ -431,7 +425,7 @@ describe('App e2e', () => {
         return pactum.spec()
         .patch(`${bookmarksPath}/{id}`)
         .withPathParams('id', '$S{bookmarkId}')
-        .withBody(dto)
+        .withBody(partialDto)
         .withHeaders({
           Authorization: 'Bearer $S{userAccessToken}',
         })
@@ -457,7 +451,7 @@ describe('App e2e', () => {
         .patch(`${bookmarksPath}/{id}`)
         .withPathParams('id', '$S{bookmarkId}')
         .withBody(dto)
-        .expectStatus(403)
+        .expectStatus(401)
       })
     })
 
@@ -486,10 +480,7 @@ describe('App e2e', () => {
         return pactum.spec()
         .delete(`${bookmarksPath}/{id}`)
         .withPathParams('id', '$S{bookmarkId2}')
-        .withHeaders({
-          Authorization: 'Bearer $S{userAccessToken}',
-        })
-        .expectStatus(403)
+        .expectStatus(401)
       })
     })
   })
