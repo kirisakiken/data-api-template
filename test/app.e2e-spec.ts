@@ -463,15 +463,33 @@ describe('App e2e', () => {
 
     describe('Delete bookmark', () => {
       it('delete bookmark successfully', () => {
-
+        return pactum.spec()
+        .delete(`${bookmarksPath}/{id}`)
+        .withPathParams('id', '$S{bookmarkId}')
+        .withHeaders({
+          Authorization: 'Bearer $S{userAccessToken}',
+        })
+        .expectStatus(200)
       })
 
       it('delete bookmark fails if not found', () => {
-
+        return pactum.spec()
+        .delete(`${bookmarksPath}/{id}`)
+        .withPathParams('id', '$S{bookmarkId}')
+        .withHeaders({
+          Authorization: 'Bearer $S{userAccessToken}',
+        })
+        .expectStatus(404)
       })
 
       it('delete bookmark fails if unauthorized', () => {
-        
+        return pactum.spec()
+        .delete(`${bookmarksPath}/{id}`)
+        .withPathParams('id', '$S{bookmarkId2}')
+        .withHeaders({
+          Authorization: 'Bearer $S{userAccessToken}',
+        })
+        .expectStatus(403)
       })
     })
   })
