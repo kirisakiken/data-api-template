@@ -10,6 +10,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum StudentType {
+  unknown
+  associate
+  bachelors
+  masters
+  doctoral
+}
+
 model User {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -39,4 +47,18 @@ model Bookmark {
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("bookmarks")
+}
+
+model Student {
+  id Int @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  student_no String @unique
+  first_name String
+  last_name String
+  student_type StudentType
+  entry_year Int
+
+  @@id([student_no])
 }
