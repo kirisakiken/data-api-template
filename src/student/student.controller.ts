@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Param, Post, UseGuards } from '@nestjs/common'
+import { Controller, Get, Inject, Param, ParseEnumPipe, ParseIntPipe, UseGuards } from '@nestjs/common'
 import { StudentType } from '@prisma/client'
 import { JwtGuard } from '../auth/guard'
 import { StudentService } from './student.service'
@@ -14,18 +14,18 @@ export class StudentController {
     return this.studentService.listStudents()
   }
 
-  @Get(':student_no')
-  getStudentByNo(@Param('student_no') studentNo: number) {
+  @Get('/by-student-no/:student_no')
+  getStudentByNo(@Param('student_no', ParseIntPipe) studentNo: number) {
     return this.studentService.getStudentByNo(studentNo)
   }
 
-  @Get(':student_type')
+  @Get('/by-student-type/:student_type')
   getStudentsByType(@Param('student_type') studentType: StudentType) {
     return this.studentService.getStudentsByType(studentType)
   }
 
-  @Get(':entry_year')
-  getStudentsByEntryYear(@Param('entry_year') entryYear: number) {
+  @Get('/by-entry-year/:entry_year')
+  getStudentsByEntryYear(@Param('entry_year', ParseIntPipe) entryYear: number) {
     return this.studentService.getStudentsByEntryYear(entryYear)
   }
 }

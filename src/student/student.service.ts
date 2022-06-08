@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { StudentType } from '@prisma/client'
 import { PrismaService } from '../prisma/prisma.service'
 import { studentSelectOptions } from './dto'
@@ -9,17 +9,24 @@ export class StudentService {
   private prismaService!: PrismaService
 
   public listStudents() {
-    return this.prismaService.student.findMany()
+    return this.prismaService.student.findMany({
+      select: studentSelectOptions,
+    })
   }
 
-  public getStudentByNo(studentNo: number) {
-    return this.prismaService.student.findUnique({
+  public async getStudentByNo(studentNo: number) {
+    const student = await this.prismaService.student.findUnique({
       where: {
         student_no: studentNo,
       },
-      rejectOnNotFound: true,
       select: studentSelectOptions,
     })
+
+    if (!student) {
+      throw new NotFoundException(`Unable to find student by no: ${studentNo}`)
+    }
+
+    return student
   }
 
   public getStudentsByType(studentType: StudentType) {
