@@ -4,6 +4,7 @@ import { BookmarkModule } from './bookmark/bookmark.module';
 import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
+import { StudentModule } from './student/student.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ConfigModule } from '@nestjs/config';
     BookmarkModule,
     UserModule,
     PrismaModule,
+    StudentModule,
   ],
 })
 export class AppModule {}
