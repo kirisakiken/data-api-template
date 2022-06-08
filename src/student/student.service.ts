@@ -86,4 +86,24 @@ export class StudentService {
       select: studentSelectOptions,
     })
   }
+
+  public async deleteStudentByStudentNo(studentNo: number) {
+    const student = await this.prismaService.student.findUnique({
+      where: {
+        student_no: studentNo,
+      },
+      select: studentSelectOptions,
+    })
+
+    if (!student) {
+      throw new NotFoundException(`Unable to find student by no: ${studentNo}`)
+    }
+
+    return this.prismaService.student.delete({
+      where: {
+        student_no: studentNo,
+      },
+      select: studentSelectOptions,
+    })
+  }
 }
