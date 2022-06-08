@@ -1,7 +1,7 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { StudentType } from '@prisma/client'
 import { PrismaService } from '../prisma/prisma.service'
-import { studentSelectOptions } from './dto'
+import { CreateStudentDto, studentSelectOptions } from './dto'
 
 @Injectable()
 export class StudentService {
@@ -42,6 +42,29 @@ export class StudentService {
     return this.prismaService.student.findMany({
       where: {
         entry_year: entryYear,
+      },
+      select: studentSelectOptions,
+    })
+  }
+
+  public async createStudent(dto: CreateStudentDto) {
+    const student = await this.prismaService.student.findUnique({
+      where: {
+        student_no: dto.studentNo,
+      },
+    })
+
+    if (student) {
+      throw new ConflictException(`Student with no: ${dto.studentNo} already exists`)
+    }
+
+    return this.prismaService.student.create({
+      data: {
+        student_no: dto.studentNo,
+        first_name: dto.firstName,
+        last_name: dto.lastName,
+        student_type: dto.studentType,
+        entry_year: dto.entryYear,
       },
       select: studentSelectOptions,
     })
