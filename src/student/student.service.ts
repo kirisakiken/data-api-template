@@ -1,7 +1,7 @@
 import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { StudentType } from '@prisma/client'
 import { PrismaService } from '../prisma/prisma.service'
-import { CreateStudentDto, studentSelectOptions } from './dto'
+import { CreateStudentDto, studentSelectOptions, UpdateStudentDto } from './dto'
 
 @Injectable()
 export class StudentService {
@@ -59,6 +59,23 @@ export class StudentService {
     }
 
     return this.prismaService.student.create({
+      data: {
+        student_no: dto.studentNo,
+        first_name: dto.firstName,
+        last_name: dto.lastName,
+        student_type: dto.studentType,
+        entry_year: dto.entryYear,
+      },
+      select: studentSelectOptions,
+    })
+  }
+
+  public async updateStudent(dto: UpdateStudentDto) {
+    await this.getStudentByNo(dto.studentNo)
+    return this.prismaService.student.update({
+      where: {
+        student_no: dto.studentNo,
+      },
       data: {
         student_no: dto.studentNo,
         first_name: dto.firstName,

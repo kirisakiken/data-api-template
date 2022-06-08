@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Inject, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common'
 import { StudentType } from '@prisma/client'
 import { JwtGuard } from '../auth/guard'
-import { CreateStudentDto } from './dto'
+import { CreateStudentDto, UpdateStudentDto } from './dto'
 import { StudentService } from './student.service'
 
 @UseGuards(JwtGuard)
@@ -33,5 +33,10 @@ export class StudentController {
   @Post('/create')
   createStudent(@Body() dto: CreateStudentDto) {
     return this.studentService.createStudent(dto)
+  }
+
+  @Patch('/update')
+  updateStudent(@Body() dto: UpdateStudentDto) {
+    return this.studentService.updateStudent(dto)
   }
 }

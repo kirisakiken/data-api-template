@@ -1,5 +1,5 @@
-import { StudentType } from "@prisma/client";
-import { IsEnum, IsInt, IsNotEmpty, IsString } from "class-validator";
+import { StudentType } from '@prisma/client'
+import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class CreateStudentDto {
     @IsInt()
@@ -21,4 +21,26 @@ export class CreateStudentDto {
     @IsInt()
     @IsNotEmpty()
     entryYear: number
+}
+
+export class UpdateStudentDto {
+    @IsInt()
+    @IsNotEmpty()
+    studentNo: number
+
+    @IsString()
+    @IsOptional()
+    firstName?: string
+
+    @IsString()
+    @IsOptional()
+    lastName?: string
+
+    @IsEnum(StudentType)
+    @IsOptional()
+    studentType?: StudentType
+
+    @IsInt()
+    @IsOptional()
+    entryYear?: number
 }
