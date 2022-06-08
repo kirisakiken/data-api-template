@@ -1,5 +1,7 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { Inject, Injectable } from '@nestjs/common'
+import { StudentType } from '@prisma/client'
+import { PrismaService } from '../prisma/prisma.service'
+import { studentSelectOptions } from './dto'
 
 @Injectable()
 export class StudentService {
@@ -16,13 +18,25 @@ export class StudentService {
         student_no: studentNo,
       },
       rejectOnNotFound: true,
-      select: { // select specified columns only
-        student_no: true,
-        first_name: true,
-        last_name: true,
-        student_type: true,
-        entry_year: true,
+      select: studentSelectOptions,
+    })
+  }
+
+  public getStudentsByType(studentType: StudentType) {
+    return this.prismaService.student.findMany({
+      where: {
+        student_type: studentType,
       },
+      select: studentSelectOptions,
+    })
+  }
+
+  public getStudentsByEntryYear(entryYear: number) {
+    return this.prismaService.student.findMany({
+      where: {
+        entry_year: entryYear,
+      },
+      select: studentSelectOptions,
     })
   }
 }
