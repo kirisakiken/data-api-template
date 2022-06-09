@@ -72,10 +72,10 @@ describe('StudentController', () => {
       })
     })
 
-    // describe('getStudentByNo', () => {
-    //   it('get sucessfully', async () => {
+    describe('getStudentByNo', () => {
+      it('get sucessfully', async () => {
 
-    //   })
-    // })
+      })
+    })
   })
 })

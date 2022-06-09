@@ -18,6 +18,13 @@ enum StudentType {
   doctoral
 }
 
+enum LecturerType {
+  assistant_professor
+  associate_professor
+  full_professor
+  distinguished_professor
+}
+
 model User {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -62,4 +69,20 @@ model Student {
 
   @@id([student_no])
   @@map("students")
+}
+
+model Lecturer {
+  id Int @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lecturer_no Int @unique
+  first_name String
+  last_name String
+  lecturer_type LecturerType
+  entry_year Int
+  salary Int
+
+  @@id([lecturer_no])
+  @@map("lecturers")
 }
