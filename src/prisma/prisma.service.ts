@@ -29,7 +29,7 @@ export class PrismaService extends PrismaClient {
       where: {
         user_id: userId,
       },
-    })
+    });
   }
 
   async getBookmark(userId: number, bookmarkId: number) {
@@ -38,13 +38,15 @@ export class PrismaService extends PrismaClient {
         id: bookmarkId,
         user_id: userId,
       },
-    })
+    });
 
     if (!bookmark) {
-      throw new NotFoundException(`Unable to find bookmark by id: ${bookmarkId}`)
+      throw new NotFoundException(
+        `Unable to find bookmark by id: ${bookmarkId}`,
+      );
     }
 
-    return bookmark
+    return bookmark;
   }
 
   createBookmark(userId: number, dto: CreateBookMarkDto) {
@@ -53,19 +55,25 @@ export class PrismaService extends PrismaClient {
         user_id: userId,
         ...dto,
       },
-    })
+    });
   }
 
-  async updateBookmark(userId: number, bookmarkId: number, dto: UpdateBookmarkDto) {
+  async updateBookmark(
+    userId: number,
+    bookmarkId: number,
+    dto: UpdateBookmarkDto,
+  ) {
     const bookmark = await this.bookmark.findFirst({
       where: {
         id: bookmarkId,
         user_id: userId,
       },
-    })
+    });
 
     if (!bookmark) {
-      throw new NotFoundException(`Unable to find bookmark by id: ${bookmarkId}`)
+      throw new NotFoundException(
+        `Unable to find bookmark by id: ${bookmarkId}`,
+      );
     }
 
     return this.bookmark.update({
@@ -75,21 +83,23 @@ export class PrismaService extends PrismaClient {
       data: {
         ...dto,
       },
-    })
+    });
   }
 
   async deleteBookmarkById(userId: number, bookmarkId: number) {
-    const bookmark = await this.getBookmark(userId, bookmarkId)
+    const bookmark = await this.getBookmark(userId, bookmarkId);
 
     if (!bookmark) {
-      throw new NotFoundException(`Unable to find bookmark by id: ${bookmarkId}`)
+      throw new NotFoundException(
+        `Unable to find bookmark by id: ${bookmarkId}`,
+      );
     }
 
     return this.bookmark.delete({
       where: {
         id: bookmark.id,
       },
-    })
+    });
   }
 
   //#endregion

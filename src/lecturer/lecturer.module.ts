@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common'
-import { LecturerController } from './lecturer.controller'
-import { LecturerService } from './lecturer.service'
+import { Module } from '@nestjs/common';
+import { LecturerController } from './lecturer.controller';
+import { LecturerService } from './lecturer.service';
 
 @Module({
   controllers: [LecturerController],
