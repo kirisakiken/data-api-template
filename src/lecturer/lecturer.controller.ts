@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common'
 import { LecturerType } from '@prisma/client';
 import { JwtGuard } from '../auth/guard';
 import { CreateLecturerDto, UpdateLecturerDto } from './dto';
@@ -38,5 +38,12 @@ export class LecturerController {
   @Patch('/update')
   updateLecturer(@Body() dto: UpdateLecturerDto) {
     return this.lecturerService.updateLecturer(dto)
+  }
+
+  @Delete('/delete/by-lecturer-no/:lecturer_no')
+  deleteLecturerByLecturerNo(
+    @Param('lecturer_no', ParseIntPipe) lecturerNo: number,
+  ) {
+    return this.lecturerService.deleteLecturerByLecturerNo(lecturerNo)
   }
 }

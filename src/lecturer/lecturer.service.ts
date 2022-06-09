@@ -45,7 +45,7 @@ export class LecturerService {
     })
   }
 
-  public createLecturer(dto: CreateLecturerDto) {
+  public async createLecturer(dto: CreateLecturerDto) {
     const lecturer = await this.prismaService.lecturer.findUnique({
       where: {
         lecturer_no: dto.lecturerNo,
@@ -84,6 +84,16 @@ export class LecturerService {
         lecturer_type: dto.lecturerType,
         entry_year: dto.entryYear,
         salary: dto.salary,
+      },
+      select: lecturerSelectOptions,
+    })
+  }
+
+  public async deleteLecturerByLecturerNo(lecturerNo: number) {
+    await this.getLecturerByNo(lecturerNo)
+    return this.prismaService.lecturer.delete({
+      where: {
+        lecturer_no: lecturerNo,
       },
       select: lecturerSelectOptions,
     })
