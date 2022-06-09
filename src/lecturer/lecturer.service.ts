@@ -1,7 +1,7 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { LecturerType } from '@prisma/client'
 import { PrismaService } from '../prisma/prisma.service'
-import { lecturerSelectOptions } from './dto'
+import { CreateLecturerDto, lecturerSelectOptions, UpdateLecturerDto } from './dto'
 
 @Injectable()
 export class LecturerService {
@@ -40,6 +40,50 @@ export class LecturerService {
     return this.prismaService.lecturer.findMany({
       where: {
         entry_year: entryYear,
+      },
+      select: lecturerSelectOptions,
+    })
+  }
+
+  public createLecturer(dto: CreateLecturerDto) {
+    const lecturer = await this.prismaService.lecturer.findUnique({
+      where: {
+        lecturer_no: dto.lecturerNo,
+      },
+    })
+
+    if (lecturer) {
+      throw new ConflictException(
+        `Lecturer with no: ${dto.lecturerNo} already exists`,
+      )
+    }
+
+    return this.prismaService.lecturer.create({
+      data: {
+        lecturer_no: dto.lecturerNo,
+        first_name: dto.firstName,
+        last_name: dto.lastName,
+        lecturer_type: dto.lecturerType,
+        entry_year: dto.entryYear,
+        salary: dto.salary,
+      },
+      select: lecturerSelectOptions,
+    })
+  }
+
+  public async updateLecturer(dto: UpdateLecturerDto) {
+    await this.getLecturerByNo(dto.lecturerNo)
+    return this.prismaService.lecturer.update({
+      where: {
+        lecturer_no: dto.lecturerNo,
+      },
+      data: {
+        lecturer_no: dto.lecturerNo,
+        first_name: dto.firstName,
+        last_name: dto.lastName,
+        lecturer_type: dto.lecturerType,
+        entry_year: dto.entryYear,
+        salary: dto.salary,
       },
       select: lecturerSelectOptions,
     })
