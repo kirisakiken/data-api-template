@@ -74,6 +74,26 @@ export class LectureService {
         lecture_no: dto.lectureNo,
         lecturer_reference: dto.lecturerReference,
       },
+      select: lectureSelectOptions,
+    })
+  }
+
+  public async deleteLectureByLectureNo(lectureNo: string) {
+    await this.getLectureByLectureNo(lectureNo)
+    return this.prismaService.lecture.delete({
+      where: {
+        lecture_no: lectureNo,
+      },
+      select: lectureSelectOptions,
+    })
+  }
+
+  // TODO: select options?
+  public deleteLectureByLecturerReference(lecturerReference: number) {
+    return this.prismaService.lecture.deleteMany({
+      where: {
+        lecturer_reference: lecturerReference,
+      },
     })
   }
 

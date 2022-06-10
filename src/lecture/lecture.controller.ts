@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
@@ -44,5 +45,15 @@ export class LectureController {
   @Patch('/update')
   updateLecture(@Body() dto: UpdateLectureDto) {
     return this.lectureService.updateLecture(dto)
+  }
+
+  @Delete('/delete/by-lecture-no/:lecture_no')
+  deleteLectureByLectureNo(@Param('lecture_no') lectureNo: string) {
+    return this.lectureService.deleteLectureByLectureNo(lectureNo)
+  }
+
+  @Delete('/delete/by-lecturer-reference/:lecturer_reference')
+  deleteLecturesByLecturerReference(@Param('lecturer_reference', ParseIntPipe) lecturerReference: number) {
+    return this.lectureService.deleteLectureByLecturerReference(lecturerReference)
   }
 }
