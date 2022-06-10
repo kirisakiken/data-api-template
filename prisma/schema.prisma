@@ -83,6 +83,22 @@ model Lecturer {
   entry_year Int
   salary Int
 
+  classes Class[]
+
   @@id([lecturer_no])
   @@map("lecturers")
+}
+
+model Class {
+  id Int @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  class_no String @unique
+  lecturer_reference Int?
+
+  lecturer Lecturer? @relation(fields: [lecturer_reference], references: [lecturer_no])
+
+  @@id([class_no])
+  @@map("classes")
 }
