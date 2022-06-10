@@ -5,11 +5,12 @@ import {
   Inject,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common'
 import { JwtGuard } from '../auth/guard'
-import { CreateLectureDto } from './dto'
+import { CreateLectureDto, UpdateLectureDto } from './dto'
 import { LectureService } from './lecture.service'
 
 @UseGuards(JwtGuard)
@@ -38,5 +39,10 @@ export class LectureController {
   @Post('/create')
   createLecture(@Body() dto: CreateLectureDto) {
     return this.lectureService.createLecture(dto)
+  }
+
+  @Patch('/update')
+  updateLecture(@Body() dto: UpdateLectureDto) {
+    return this.lectureService.updateLecture(dto)
   }
 }

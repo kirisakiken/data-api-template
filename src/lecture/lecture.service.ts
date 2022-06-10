@@ -63,6 +63,20 @@ export class LectureService {
     })
   }
 
+  public async updateLecture(dto: UpdateLectureDto) {
+    await this.getLectureByLectureNo(dto.lectureNo)
+    await this.validateRelations(dto)
+    return this.prismaService.lecture.update({
+      where: {
+        lecture_no: dto.lectureNo,
+      },
+      data: {
+        lecture_no: dto.lectureNo,
+        lecturer_reference: dto.lecturerReference,
+      },
+    })
+  }
+
   private validateRelations(dto: CreateLectureDto | UpdateLectureDto) {
     return this.lecturerService.getLecturerByNo(dto.lecturerReference)
   }

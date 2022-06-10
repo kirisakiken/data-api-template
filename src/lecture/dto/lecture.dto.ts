@@ -12,7 +12,7 @@ export class CreateLectureDto {
 
 export class UpdateLectureDto {
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   lectureNo: string
 
   @IsInt()
