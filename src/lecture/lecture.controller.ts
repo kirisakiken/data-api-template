@@ -1,12 +1,15 @@
 import {
+  Body,
   Controller,
   Get,
   Inject,
   Param,
   ParseIntPipe,
+  Post,
   UseGuards,
 } from '@nestjs/common'
 import { JwtGuard } from '../auth/guard'
+import { CreateLectureDto } from './dto'
 import { LectureService } from './lecture.service'
 
 @UseGuards(JwtGuard)
@@ -30,5 +33,10 @@ export class LectureController {
     @Param('lecturer_reference', ParseIntPipe) lecturerReference: number,
   ) {
     return this.lectureService.getLecturesByLecturerReference(lecturerReference)
+  }
+
+  @Post('/create')
+  createLecture(@Body() dto: CreateLectureDto) {
+    return this.lectureService.createLecture(dto)
   }
 }
