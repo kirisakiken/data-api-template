@@ -1,15 +1,15 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator'
 
 export class UpdateBookmarkDto {
   @IsString()
   @IsOptional()
-  title?: string;
+  title?: string
 
   @IsString()
   @IsOptional()
-  description?: string;
+  description?: string
 
   @IsString()
   @IsOptional()
-  link?: string;
+  link?: string
 }

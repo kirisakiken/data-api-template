@@ -1,5 +1,11 @@
-import { LecturerType } from "@prisma/client"
-import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator"
+import { LecturerType } from '@prisma/client'
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator'
 
 export class CreateLecturerDto {
   @IsInt()
@@ -26,7 +32,7 @@ export class CreateLecturerDto {
   @IsNotEmpty()
   salary: number
 }
-  
+
 export class UpdateLecturerDto {
   @IsInt()
   @IsNotEmpty()

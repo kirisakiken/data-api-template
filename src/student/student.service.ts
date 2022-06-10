@@ -3,24 +3,20 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { StudentType } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
-import {
-  CreateStudentDto,
-  studentSelectOptions,
-  UpdateStudentDto,
-} from './dto';
+} from '@nestjs/common'
+import { StudentType } from '@prisma/client'
+import { PrismaService } from '../prisma/prisma.service'
+import { CreateStudentDto, studentSelectOptions, UpdateStudentDto } from './dto'
 
 @Injectable()
 export class StudentService {
   @Inject()
-  private prismaService!: PrismaService;
+  private prismaService!: PrismaService
 
   public listStudents() {
     return this.prismaService.student.findMany({
       select: studentSelectOptions,
-    });
+    })
   }
 
   public async getStudentByNo(studentNo: number) {
@@ -29,13 +25,13 @@ export class StudentService {
         student_no: studentNo,
       },
       select: studentSelectOptions,
-    });
+    })
 
     if (!student) {
-      throw new NotFoundException(`Unable to find student by no: ${studentNo}`);
+      throw new NotFoundException(`Unable to find student by no: ${studentNo}`)
     }
 
-    return student;
+    return student
   }
 
   public getStudentsByType(studentType: StudentType) {
@@ -44,7 +40,7 @@ export class StudentService {
         student_type: studentType,
       },
       select: studentSelectOptions,
-    });
+    })
   }
 
   public getStudentsByEntryYear(entryYear: number) {
@@ -53,7 +49,7 @@ export class StudentService {
         entry_year: entryYear,
       },
       select: studentSelectOptions,
-    });
+    })
   }
 
   public async createStudent(dto: CreateStudentDto) {
@@ -61,12 +57,12 @@ export class StudentService {
       where: {
         student_no: dto.studentNo,
       },
-    });
+    })
 
     if (student) {
       throw new ConflictException(
         `Student with no: ${dto.studentNo} already exists`,
-      );
+      )
     }
 
     return this.prismaService.student.create({
@@ -78,11 +74,11 @@ export class StudentService {
         entry_year: dto.entryYear,
       },
       select: studentSelectOptions,
-    });
+    })
   }
 
   public async updateStudent(dto: UpdateStudentDto) {
-    await this.getStudentByNo(dto.studentNo);
+    await this.getStudentByNo(dto.studentNo)
     return this.prismaService.student.update({
       where: {
         student_no: dto.studentNo,
@@ -95,7 +91,7 @@ export class StudentService {
         entry_year: dto.entryYear,
       },
       select: studentSelectOptions,
-    });
+    })
   }
 
   public async deleteStudentByStudentNo(studentNo: number) {
@@ -105,6 +101,6 @@ export class StudentService {
         student_no: studentNo,
       },
       select: studentSelectOptions,
-    });
+    })
   }
 }

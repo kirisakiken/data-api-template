@@ -1,8 +1,19 @@
-import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common'
-import { LecturerType } from '@prisma/client';
-import { JwtGuard } from '../auth/guard';
-import { CreateLecturerDto, UpdateLecturerDto } from './dto';
-import { LecturerService } from './lecturer.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common'
+import { LecturerType } from '@prisma/client'
+import { JwtGuard } from '../auth/guard'
+import { CreateLecturerDto, UpdateLecturerDto } from './dto'
+import { LecturerService } from './lecturer.service'
 
 @UseGuards(JwtGuard)
 @Controller('lecturer')
@@ -26,7 +37,9 @@ export class LecturerController {
   }
 
   @Get('/by-entry-year/:entry_year')
-  getLecturersByEntryYear(@Param('entry_year', ParseIntPipe) entryYear: number) {
+  getLecturersByEntryYear(
+    @Param('entry_year', ParseIntPipe) entryYear: number,
+  ) {
     return this.lecturerService.getLecturersByEntryYear(entryYear)
   }
 

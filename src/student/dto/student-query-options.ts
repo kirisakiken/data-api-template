@@ -4,4 +4,4 @@ export const studentSelectOptions = {
   last_name: true,
   student_type: true,
   entry_year: true,
-};
+}

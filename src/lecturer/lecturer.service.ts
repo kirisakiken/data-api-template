@@ -1,7 +1,16 @@
-import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common'
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { LecturerType } from '@prisma/client'
 import { PrismaService } from '../prisma/prisma.service'
-import { CreateLecturerDto, lecturerSelectOptions, UpdateLecturerDto } from './dto'
+import {
+  CreateLecturerDto,
+  lecturerSelectOptions,
+  UpdateLecturerDto,
+} from './dto'
 
 @Injectable()
 export class LecturerService {
@@ -21,7 +30,9 @@ export class LecturerService {
     })
 
     if (!lecturer) {
-      throw new NotFoundException(`Unable to find lecturer by no: ${lecturerNo}`)
+      throw new NotFoundException(
+        `Unable to find lecturer by no: ${lecturerNo}`,
+      )
     }
 
     return lecturer
