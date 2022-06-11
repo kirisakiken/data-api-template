@@ -102,3 +102,16 @@ model Lecture {
   @@id([lecture_no])
   @@map("lectures")
 }
+
+model Exam {
+  id Int @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  exam_no String @unique
+  exam_name String
+  year Int
+
+  @@id([exam_no])
+  @@map("exams")
+}
