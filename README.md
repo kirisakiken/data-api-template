@@ -1,8 +1,6 @@
-# Under development
+# API Template
 
-# TODO
-- update readme
-- add architecture graph
-- docker
-- k8s deployment
-- frontend app
+### Stacks;
+- NestJS
+- Prisma
+- PostgreSQL
